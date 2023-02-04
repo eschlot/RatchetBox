@@ -60,28 +60,26 @@ function calcContinousTubes(arr) =
 	) [d1,d2,h,pos]];
 
 
-//input: [[startDia,endDia,len,pos],...],maxDia
-module continousTubes(griffTubes,maxDia) 
+
+
+//input: [[startDia,endDia,len,pos],...]
+module continousTubes(griffTubes) 
   for(p=griffTubes) {
-    startDia=p[0]+.5;
-    endDia=p[1]+.5;
-    length=p[2]+.5;
+    startDia=p[0];
+    endDia=p[1];
+    length=p[2];
     pos=p[3];
-    platzOben=(boxHeight-aufbauHoehe);
-    mittelpunktUnterDeckel=(maxDia/2)+1;
-
+    
     translate([0,0,pos]) {
-      cyl(l=length,d1=startDia,d2=endDia,anchor=BOTTOM);
-
-      if (mittelpunktUnterDeckel>platzOben)
-	translate([-mittelpunktUnterDeckel/2,0,0])
-	  {
-	    prismoid(size1=[mittelpunktUnterDeckel,startDia],
-		     size2=[mittelpunktUnterDeckel,endDia],
-		     h=length);
-	  }
+      cyl(l=length+.5,d1=startDia+.5,d2=endDia+.5,anchor=BOTTOM);// anchor_arrow(40);
+      translate([(-startDia-.5)/2,0,0])
+	prismoid(size1=[startDia+.5,startDia+.5],size2=[endDia+.5,endDia+.5],h=length+.5,shift=[(startDia-endDia)/2,0]);
+      
     }
 }
+
+
+
 
 //-------------------------------------------------------------------------------------
 
@@ -116,12 +114,11 @@ module liegendeNuesse(x,y,rot,nutDefinitions)
 // [x,y,[rotation_x,rotation_y,rotation_z]]
 module liegendeNuss(x,y,rot,name,continousTubes,maxDia)
 {
-  echo("liegendeNuss:",name);
   translate([x,y,boxHeight-maxDia/2-.5])
     rotate(rot){
     griffTubes=calcContinousTubes(continousTubes);
     echo(griffTubes);
-    continousTubes(griffTubes,maxDia);
+    continousTubes(griffTubes);
 
     translate([(maxDia/2)+1,0,1])
       rotate([0,270,0])
@@ -139,7 +136,7 @@ module knarre(x,y,rotation,
 	      durchmesserPie,tiefePie,winkelPie,
 	      griffDaten)
 {
-  translate([x,y,aufbauHoehe-7])
+  translate([x,y,aufbauHoehe+0.01])
     rotate(rotation)
     {
       cylinder(tiefeKopf,d=durchmesserKopf,anchor=TOP);
@@ -153,13 +150,8 @@ module knarre(x,y,rotation,
       rotate([0,90,0])
 	{
 	  griffTubes=calcContinousTubes(griffDaten);
-	  echo("griffTubes:",griffTubes);
-	  // output:[[startDia,endDia,len,pos],...]
-
-	  maxDia=max(concat([for (p = griffTubes) p[0]],[for (p = griffTubes) p[1]]));
-
-	  echo("maxDia:",maxDia);
-	  continousTubes(griffTubes,maxDia);
+	  //echo(griffTubes);
+	  continousTubes(griffTubes);
 	}
     }
 }
@@ -248,7 +240,7 @@ normNuesse=[
 		 ];
 
 hexNuesse=[
-		 ["Gelenk",[[0,14.1],[28,14.1],[28.1,8.6],[35,8.6]]],
+		 ["Gelenk",[[0,14.1],[28,14.1],[28.1,0],[0,8.6],[35,8.6]]],
 		 ["HX3",[[0,12],[18.5,12],[18.6,7.2],[28.8,3.3],[32.72,3.3]]],
 		 ["HX4",[[0,12],[18.5,12],[18.6,7.2],[25,4.6],[32.3,4.6]]],
 		 ["HX5",[[0,12],[18.5,12],[18.6,7.2],[25,5.66],[32.3,5.66]]],
@@ -274,18 +266,17 @@ module innerBodies ()
   for (b =bohrungenRaw) {
     bohrung(b);
   }
-
-  knarre(165-45/2-1.75,32.5,[0,0,180],
-	 9,17,
-	 25,8,
-	 32,6,220,
-	 griffDaten);
-
+  
   liegendeNuesse(7.5,110.5,[90,90,0],mNuesse);
   liegendeNuesse(182,110.5,[90,90,0],tNuesse);
   liegendeNuesse(175,52,[270,90,0],normNuesse);  
   liegendeNuesse(162,14,[270,90,0],hexNuesse);
   
+  knarre(165-45/2-1.75,32.5,[0,0,180],
+	 9,17,
+	 25,8,
+	 32,6,220,griffDaten);
+
   // x,y,rot,len_long,radius_long,len_short,radius_short
   liegendeNuesse(2,53,[0,90,0],verlaengerung150);
   liegendeNuesse(132.5,8.5,[0,90,0],verlaengerung100);
@@ -294,8 +285,8 @@ module innerBodies ()
 
 
 
-if (false) {
-  //translate([0,0,boxHeight]) cube([237,112,0.5]);
+if (true) {
+  translate([0,0,boxHeight]) cube([237,112,0.5]);
   innerBodies();
  }
  else {
@@ -305,7 +296,6 @@ if (false) {
      }
      innerBodies();
    }
-   //   translate([0,0,boxHeight]) cube([237,112,0.5]);
  }
 
 
