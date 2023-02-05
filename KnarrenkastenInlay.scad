@@ -139,14 +139,24 @@ module knarre(x,y,rotation,
 	      durchmesserPie,tiefePie,winkelPie,
 	      griffDaten)
 {
-  translate([x,y,aufbauHoehe-7])
+  belowAufbauHoehe=7;
+  echo("aufbauHoehe-belowAufbauHoehe",aufbauHoehe-belowAufbauHoehe);
+  translate([x,y,aufbauHoehe-belowAufbauHoehe])
     rotate(rotation)
     {
-      cylinder(tiefeKopf,d=durchmesserKopf,anchor=TOP);
-      cyl(tiefeKopf2,d=durchmesserKopf2,rounding1=2,anchor=TOP);
+      additionalHeight=boxHeight-aufbauHoehe+belowAufbauHoehe;
+      echo("additionalHeight",additionalHeight);
+
+      echo("tiefeKopf+additionalHeight",tiefeKopf+additionalHeight);
+      echo("tiefeKopf2+additionalHeight",tiefeKopf2+additionalHeight);
+      
+      translate([0,0,additionalHeight])
+	cyl(h=tiefeKopf+additionalHeight,d=durchmesserKopf,rounding1=1,anchor=TOP);
+      translate([0,0,additionalHeight])
+	cyl(h=tiefeKopf2+additionalHeight,d=durchmesserKopf2,rounding1=2,anchor=TOP);
       translate([0,0,-tiefePie])
 	{
-	  pie_slice(h=tiefePie,r=durchmesserPie/2,
+	  pie_slice(h=tiefePie+additionalHeight,r=durchmesserPie/2,
 		    ang=winkelPie,spin=[0,0,-winkelPie/2]);
 	}
             
@@ -275,11 +285,6 @@ module innerBodies ()
     bohrung(b);
   }
 
-  knarre(165-45/2-1.75,32.5,[0,0,180],
-	 9,17,
-	 25,8,
-	 32,6,220,
-	 griffDaten);
 
   liegendeNuesse(7.5,110.5,[90,90,0],mNuesse);
   liegendeNuesse(182,110.5,[90,90,0],tNuesse);
@@ -287,9 +292,17 @@ module innerBodies ()
   liegendeNuesse(162,14,[270,90,0],hexNuesse);
   
   // x,y,rot,len_long,radius_long,len_short,radius_short
-  liegendeNuesse(2,53,[0,90,0],verlaengerung150);
+  liegendeNuesse(2,51,[0,90,1],verlaengerung150);
   liegendeNuesse(132.5,8.5,[0,90,0],verlaengerung100);
   liegendeNuesse(229,66,[0,90,270],verlaengerung50);    
+
+  knarre(165-45/2-1.75,32.5,[0,0,180],
+	 9,17,
+	 25,8,
+	 32,6,220,
+	 griffDaten);
+
+
 }
 
 
