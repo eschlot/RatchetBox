@@ -28,12 +28,19 @@ module bohrung(parameters)
   d=parameters[2];
   name=parameters[3];
 
-  textSize=3;
-  
-  translate([x,y,(aufbauHoehe+2)/2])
-    cyl(h=aufbauHoehe-1.99, r=d/2, rounding2=-2, $fa=1, $fs=1);
+  hexNutHeight=25.5;
 
-  translate([x,y-textSize/2,(1)])
+  lenOfHexNutAboveAufbauhoehe=(boxHeight-aufbauHoehe)-1;
+  boreDepth=hexNutHeight-lenOfHexNutAboveAufbauhoehe;
+
+  echo("boreDepth",boreDepth);
+  textSize=5;
+  
+  translate([x,y,aufbauHoehe])
+    cyl(h=boreDepth, d=d, rounding2=-2, anchor=TOP);
+
+  translate([x,y,aufbauHoehe])
+    translate([0,-textSize/2,-boreDepth-1])
     color("blue")
     linear_extrude(height=2)
     text(name,size=textSize,halign="center");
@@ -306,19 +313,28 @@ module innerBodies ()
 }
 
 
+left = false;
 
 if (false) {
   //translate([0,0,boxHeight]) cube([237,112,0.5]);
   innerBodies();
  }
  else {
-   difference(){
-     { // Basiskoerper
-       diff() cube([boxWidth,boxDepth,aufbauHoehe]) edge_profile() mask2d_roundover(r=1);
+
+   difference() {
+     {
+       difference(){
+	 { // Basiskoerper
+	   diff() cube([boxWidth,boxDepth,aufbauHoehe]) edge_profile() mask2d_roundover(r=1);
+	 }
+	 innerBodies();
+       }
      }
-     innerBodies();
-   }
-   //   translate([0,0,boxHeight]) cube([237,112,0.5]);
+     
+     translate([left?boxWidth/2:0,-1,-1])
+       cube([boxWidth/2,boxDepth+2,aufbauHoehe+2]);
+       //   translate([0,0,boxHeight]) cube([237,112,0.5]);
+       }
  }
 
 
