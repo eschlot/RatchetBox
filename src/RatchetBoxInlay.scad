@@ -161,7 +161,7 @@ module ratchet(x,y,rotation,
 	       headDiameter2,headDepth2,
 	       pieDiameter,pieDepth,pieAngle,
 	       positionBelowBaseLayer,
-	       gripData)
+	       handleData)
 {
   translate([x,y,baseHeight-positionBelowBaseLayer])
     rotate(rotation)
@@ -180,7 +180,7 @@ module ratchet(x,y,rotation,
             
       rotate([0,90,0])
 	{
-	  tubes=calcContinousTubes(gripData);
+	  tubes=calcContinousTubes(handleData);
 	  maxDia=max(concat([for (p = tubes) p[0]],[for (p = tubes) p[1]]));
 	  continousTubes(tubes,maxDia);
 	}
@@ -189,9 +189,9 @@ module ratchet(x,y,rotation,
 
 //----------------------------------------------------------------------------------------
 
-// offset from the turning center
-// diameter at that offset
-gripData=[
+// offset from the turning center of the ratchet
+// diameter of the handle at that offset
+handleData=[
 	    [12,22],
 	    [19,22],
 	    [20,21],
@@ -211,19 +211,14 @@ gripData=[
 	    [138,0]
 	    ];
 
-// outer diameter of the hexNuts, comment
+// outer diameter of the hexNuts, comment, length of the hexNut
 boreHoles1=[
 	    [13.5,4,25.5],
-	    //[13.5,4.5,25.5],
 	    [13.5,5,25.5],
 	    [13.5,5.5,25.5],
-	    //[13.5,6.5,25.5],
-	    //[13.5,6,25.5],
 	    [13.5,7,25.5],
 	    [13.5,8,25.5],
-	    //[14.7,9,25.5],
 	    [16,10,25.5],
-	    //[17.5,11,25.5],
 	    [18.5,12,25.5],
 	    [19,13,25.5],
 	    ];
@@ -244,8 +239,7 @@ boreHoles6=[
 	    [13.5,"A",25.5],
 	    ];
 
-
-
+// [Comment,[[pos, diameter@position],[pos, diameter@position],...     ]
 metricHexNuts=[
 	       ["4",[[0,12],[32,12],[32.1,6.8],[50.5,6.8]]],
 	       ["5",[[0,12],[32,12],[32.1,8],[50.5,8]]],
@@ -359,18 +353,19 @@ module innerBodies ()
   horizontalHexNuts(182,110.5,[90,90,0],torxNuts);
   horizontalHexNuts(175,52,[270,90,0],normNuts);  
   horizontalHexNuts(162,14,[270,90,0],hexNuts);
-  
-  // x,y,rot,len_long,radius_long,len_short,radius_short
+
+  // Extensions are also modelled in the same way
   horizontalHexNuts(2,51,[0,90,1],extension150);
   horizontalHexNuts(132.5,8.5,[0,90,0],extension100);
   horizontalHexNuts(229,66,[0,90,270],extension50);    
 
+  // A ratchet
   ratchet(165-45/2-1.75,32.5,[0,0,180],
 	  9,17,
 	  25,8,
 	  32,6,220,
 	  8,
-	  gripData);
+	  handleData);
 }
 
 
@@ -380,8 +375,8 @@ suppressLeft = false;  // For smaller printers: supresses the left half of the m
 suppressRight = false; // For smaller printers: supresses the right half of the model if set to true.
 
 if (false) { // set this to true to see the positive. Usefull for checking many things
-  //  translate([0,0,boxHeight]) cube([boxWidth,boxDepth,0.5]); // Uncomment this to check if the lid of the box is touched by anything.
-  translate([0,0,baseHeight]) cube([boxWidth,boxDepth,0.1]); // Uncomment this to check if the lid of the box is touched by anything. 
+  // translate([0,0,boxHeight]) cube([boxWidth,boxDepth,0.5]); // Uncomment this to check if the lid of the box is touched by anything.
+  // translate([0,0,baseHeight]) cube([boxWidth,boxDepth,0.1]); 
   innerBodies();
  }
  else {
