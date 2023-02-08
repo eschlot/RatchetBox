@@ -192,11 +192,11 @@ module ratchet(x,y,rotation,
 // offset from the turning center of the ratchet
 // diameter of the handle at that offset
 handleData=[
-	    [12,22],
-	    [19,22],
-	    [20,21],
-	    [27,17],
-	    [30,17],
+	    [9,23],
+	    [19,23],
+	    [20,22],
+	    [27,18],
+	    [30,18],
 	    [35,12],
 	    [55,12],
 	    [56,22],
@@ -256,8 +256,8 @@ metricHexNuts=[
 
 torxNuts=[
 	  ["T20",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,4.3],[32.3,4.3]]],
-	  ["T25",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,4.7],[32.3,4.7]]],
-	  ["T27",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,5.1],[32.3,5.1]]],
+	  ["T25",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,4.7],[32.7,4.7]]],
+	  ["T27",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,5.1],[33,5.1]]],
 	  ["T30",[[0,12],[18.5,12],[18.6,7.2],[22.5,7.2],[25,5.7],[32.3,5.7]]],
 	  ];
 
@@ -282,11 +282,11 @@ extension150=[
 	      ];
 
 extension100=[
-	      ["100",[[0,13],[18,13],[18.1,9],[101,9]]]
+	      ["100",[[0,13],[15,13],[18.1,9],[101,9]]]
 	      ];
 
 extension50=[
-	     ["50",[[0,13],[18,13],[18.1,9],[51,9]]]
+	     ["50",[[0,13],[15,13],[18.1,9],[51,9]]]
 	     ];
 
 
@@ -356,14 +356,14 @@ module innerBodies ()
 
   // Extensions are also modelled in the same way
   horizontalHexNuts(2,51,[0,90,1],extension150);
-  horizontalHexNuts(132.5,8.5,[0,90,0],extension100);
+  horizontalHexNuts(132.5,8,[0,90,0],extension100);
   horizontalHexNuts(229,66,[0,90,270],extension50);    
 
   // A ratchet
   ratchet(165-45/2-1.75,32.5,[0,0,180],
 	  9,17,
-	  25,8,
-	  32,6,220,
+	  27,8,
+	  33.5,6,230,
 	  8,
 	  handleData);
 }
@@ -371,7 +371,7 @@ module innerBodies ()
 
 // Main processing from here:
 
-suppressLeft = false;  // For smaller printers: supresses the left half of the model if set to true.
+suppressLeft = true;  // For smaller printers: supresses the left half of the model if set to true.
 suppressRight = false; // For smaller printers: supresses the right half of the model if set to true.
 
 if (false) { // set this to true to see the positive. Usefull for checking many things
