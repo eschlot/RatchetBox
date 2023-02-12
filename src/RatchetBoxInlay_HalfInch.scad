@@ -9,7 +9,7 @@ include <BOSL2/fnliterals.scad>
 
 $fn=40;
 
-boxWidth=415;      // Width of the box in mm (x-dimension)
+boxWidth=440;      // Width of the box in mm (x-dimension)
 boxDepth=149;      // depth of the box (y-dimension)
 boxHeight = 44;    // Inner height of the box (z-dimension). Used to align all items 1mm below this height. 
 baseHeight = 32.5;   // The height of the base layer resp. top visible layer.
@@ -224,34 +224,31 @@ handleData=[
 
 // outer diameter of the hexNuts, comment, length of the hexNut
 boreHoles1=[
-	    [22,"11",36.5],
-
-	    [22.2,"12",38.3],
-	    [22,"13",36.5],
-	    [22,"14",36.8],
-	    [22,"15",36.8],
-	    [25,"17",38.65],
-	    [25.6,"18",40],
-	    [26,"19",38.65],
-	    [27.6,"21",38],
-	    [30,"22",38.4],
-	    [32,"24",38.4],
-	    [36,"27",40],
-	    [40,"30",40.2],
-	    [42,"32",40.2],
-	    
+	    [24,"11",36.5],
+	    [24.2,"12",38.3],
+	    [23.8,"13",36.5],
+	    [24,"14",36.8],
+	    [24,"15",36.8],
+	    [27,"17",38.65],
+	    [27.6,"18",40],
+	    [28,"19",38.65],
+	    [29.6,"21",38],
+	    [32,"22",38.4],
+	    [34,"24",38.4],
+	    [38,"27",40],
+	    [42,"30",40.2],
+	    [44,"32",40.2],
 	    ];
 
 // outer diameter of the hexNuts, comment, length of the hexNut
 boreHoles2=[
-	    [23.1,"3/8",36.2],
+	    [25,"3/8",36.2],
 	    ];
 
 // outer diameter of the hexNuts, comment, length of the hexNut
 boreHoles3=[
-	    [22.7,"10",37.7],
+	    [24.7,"10",37.7],
 	    ];
-
 
 
 // [Comment,[[pos, diameter@position],[pos, diameter@position],...     ]
@@ -272,13 +269,14 @@ metricHexNuts3=[
 	       ];
 
 metricHexNuts4=[
-	       ["HX6",[[0,23],[20.5,23],[25,17],[39,17],[39.1,10],[45,10],[48,8],[57,8]]],
 	       ["VZ8",[[0,24],[22,24],[26.5,16],[39.0,16.0],[39.1, 8],[55,8]]],
-	       ];
+	       ["HX12",[[0,25],[22,25],[24.5,23.5],[39.9,23.5],[40, 14.5],[62,14.5]]],
+		];
 
 metricHexNuts5=[
-	       ["HX12",[[0,25],[22,25],[24.5,23.5],[39.9,23.5],[40, 14.5],[62,14.5]]],
-	       ];
+
+	       ["HX6",[[0,23],[20.5,23],[25,17],[39,17],[39.1,10],[45,10],[48,8],[57,8]]],
+		];
 
 
 extension125=[
@@ -311,7 +309,7 @@ module innerBodies () {
     }
   }
 
-  translate([322,2,0]) {
+  translate([345,2,0]) {
     boreHoleRawData2 = boreHoleCalculationAlongYAxis(boreHoles2);
     for (b = boreHoleRawData2) {
       boreHoleDrawing(b);
@@ -326,14 +324,14 @@ module innerBodies () {
   }
 
   translate([boxWidth-2,98,0]) rotate([0,0,270])  horizontalHexNuts(0,0,[0,90,270],metricHexNuts1);
-  translate([205,81,0]) rotate([0,0,180]) horizontalHexNuts(0,0,[0,90,0],metricHexNuts2);
-  translate([130,36,0]) rotate([0,0,89.2]) horizontalHexNuts(0,0,[0,90,270],metricHexNuts3);
-  translate([284,2,0]) rotate([0,0,0]) horizontalHexNuts(0,0,[0,90,90],metricHexNuts4);
-  translate([280,75,0]) rotate([0,0,0]) horizontalHexNuts(0,0,[0,90,0],metricHexNuts5);
+  translate([290,80,0]) rotate([0,0,0]) horizontalHexNuts(0,0,[0,90,0],metricHexNuts2);
+  translate([132,39,0]) rotate([0,0,90]) horizontalHexNuts(0,0,[0,90,270],metricHexNuts3);
+  translate([335,65,0]) rotate([0,0,180]) horizontalHexNuts(0,0,[0,90,90],metricHexNuts4);
+  translate([284,2,0]) rotate([0,0,90]) horizontalHexNuts(0,0,[0,90,0],metricHexNuts5);
 
   
   // A ratchet
-  ratchet(256,58,[0,0,178],
+  ratchet(256,67,[0,0,180],
 	  18,27,
 	  44,10,
 	  1,1,1,
@@ -341,18 +339,18 @@ module innerBodies () {
 	  handleData);
 
   // Extensions are also modelled in the same way    
-  horizontalHexNuts(128,35,[0,90,178.5],extension125);    
+  horizontalHexNuts(128,39,[0,90,180],extension125);    
 
   // Extensions are also modelled in the same way
-  horizontalHexNuts(2,15,[0,90,-.8],extension250);    
+  horizontalHexNuts(2,15,[0,90,0],extension250);    
 
   // ------------------------------------------------------------------------
   pos_x=8;
-  pos_y=92;
-  pos2_x=pos_x+ 265;
+  pos_y=91;
+  pos2_x=pos_x+ 255;
   pos2_y=pos_y;
 
-  rotate([0,0,3]){
+  rotate([0,0,2.9]){
     translate([pos_x,pos_y,baseHeight]){
       rotate([0,90,0]){
 	tubes=calcContinousTubes(fixedHandle);
@@ -375,8 +373,8 @@ module innerBodies () {
 numPartsX = 3;
 numPartsY = 1;
 
-showPartXColumn = 2; // For smaller printers: supresses all part but the one numered here Range: [0 , numPartsX-1]. -1 --> nothing is suppressed
-showPartYRow = 0;    // For smaller printers: supresses all part but the one numered here.Range: [0 , numPartsY-1]. -1 --> nothing is suppressed
+showPartXColumn = -1; // For smaller printers: supresses all part but the one numered here Range: [0 , numPartsX-1]. -1 --> nothing is suppressed
+showPartYRow = -1;    // For smaller printers: supresses all part but the one numered here.Range: [0 , numPartsY-1]. -1 --> nothing is suppressed
 
 if (false) { // set this to true to see the positive. Usefull for checking many things
   //translate([0,0,boxHeight]) cube([boxWidth,boxDepth,0.5]); // Uncomment this to check if the lid of the box is touched by anything.
